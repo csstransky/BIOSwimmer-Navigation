@@ -1,9 +1,12 @@
 import socket
 import sys
 import time
+import read_data as read
+import bioswimmer as bioswimmer
 
 # Assumes Python3 environment
 
+bioswimmer = bioswimmer.BIOSwimmer()
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 fbrain = "10.221.22.2"
 buffsz = 2048
@@ -22,7 +25,8 @@ try:
 	while ( True ):
 		print( '<< receiving data' )
 		response = client.recv(buffsz).decode('utf-8')
-		print( response )
+		read.read_bioswimmer_data(bioswimmer, response)
+		print(vars(bioswimmer))
 
 		print( '>> send test message' )
 		# client.send("{vNorth: 0.43, vEast: 1.56, depth: 0.56}".encode())
