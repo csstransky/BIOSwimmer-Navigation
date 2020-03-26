@@ -1,4 +1,5 @@
 import read_data as read
+import send_data as send
 import bioswimmer as bioswimmer
 
 string1 = "{01+00000+00000+00000-00000+00000+00000}"
@@ -8,3 +9,11 @@ print(vars(bioswimmer))
 read.read_bioswimmer_data(bioswimmer, string1)
 read.read_bioswimmer_data(bioswimmer, string2)
 print("\n", vars(bioswimmer))
+
+if send.is_current_gps_coordinate_complete(bioswimmer):
+    print("************************************************************")
+    print("Completed current coordinate: ", bioswimmer.gps_tuples[0])
+    print("************************************************************")
+    del bioswimmer.gps_tuples[0]
+move_byte_stream = send.get_bioswimmer_velocity_byte_stream(bioswimmer)
+print(move_byte_stream, "\n")

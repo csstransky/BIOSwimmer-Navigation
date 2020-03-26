@@ -2,6 +2,7 @@ import socket
 import sys
 import time
 import read_data as read
+import send_data as send
 import bioswimmer as bioswimmer
 
 # Assumes Python3 environment
@@ -24,13 +25,16 @@ client.connect((fbrain, 55557))
 try: 
 	while ( True ):
 		print( '<< receiving data' )
-		response = client.recv(buffsz).decode('utf-8')
-		read.read_bioswimmer_data(bioswimmer, response)
-		print(vars(bioswimmer))
+		read.update_bioswimmer_data_from_client(bioswimmer, client)
+		print(vars(bioswimmer), "\n")
 
-		print( '>> send test message' )
-		# client.send("{vNorth: 0.43, vEast: 1.56, depth: 0.56}".encode())
-		client.send("{vNorth: 0.43, vEast: 1.56, depth: 0.56, TailAngleEnable:True, TailAngle: 3, SpeedOverrideEnable:True, SpeedOver: 0.2}".encode())
+		print( '>> sending data' )
+		move_byte_stream = send.get_bioswimmer_velocity_byte_stream(bioswimmer)
+		print(move_byte_stream, "\n")
+		client.send(move_byte_stream)
+
+		print( '>> moving camera' )
+		# TODO: add move servo here
 except KeyboardInterrupt:
 	client.close()
 	print('interrupted!')

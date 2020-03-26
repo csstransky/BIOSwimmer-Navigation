@@ -1,6 +1,8 @@
 
 class BIOSwimmer:
     def __init__(self):
+        # TODO: Set file reading later
+        self.gps_tuples = [(0, 0, 125), (2, 2, 2), (4, 4, 4)]
         self.x_acceleration = 0.0
         self.y_acceleration = 0.0
         self.z_acceleration = 0.0

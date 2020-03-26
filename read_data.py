@@ -1,5 +1,9 @@
 import re
 
+# NOTE: This seems to be the maximum buffer from the BIOSwimmer, tweaking might need to be
+# done in case the true maximum buffer length is different
+BUFFER = 2048 
+
 def update_bioswimmer(bioswimmer, command_columns):
     def update_imu_data(bioswimmer, command_columns):
         bioswimmer.x_acceleration = float(command_columns[1])
@@ -92,3 +96,7 @@ def read_bioswimmer_data(bioswimmer, serial_data):
         command_columns = tokenize_command_columns(command)
         update_bioswimmer(bioswimmer, command_columns)
     return
+
+def update_bioswimmer_data_from_client(bioswimmer, client):
+    response = client.recv(BUFFER).decode('utf-8')
+    read_bioswimmer_data(bioswimmer, response)
