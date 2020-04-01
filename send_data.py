@@ -15,7 +15,7 @@ GPS_BUFFER = 0.000002
 DEPTH_BUFFER = 1
 
 def get_bioswimmer_velocity_byte_stream(bioswimmer):
-    destination_latitude, destination_longitude, destination_depth = bioswimmer.gps_tuples[0]
+    destination_latitude, destination_longitude, destination_depth = bioswimmer.destination_coordinates[0]
     
     # NOTE: I'm assuming that y_acceleration is north/south, x_acceleration is east/west, etc.
     north_velocity = calc_velocity.get_new_velocity_double(destination_latitude, 
@@ -40,7 +40,7 @@ def get_bioswimmer_velocity_byte_stream(bioswimmer):
     return move_byte_stream
 
 def is_current_gps_coordinate_complete(bioswimmer):
-    destination_latitude, destination_longitude, destination_depth = bioswimmer.gps_tuples[0]
+    destination_latitude, destination_longitude, destination_depth = bioswimmer.destination_coordinates[0]
     return (abs(destination_latitude - bioswimmer.gps_latitude) <= GPS_BUFFER 
         and abs(destination_longitude - bioswimmer.gps_longitude) <= GPS_BUFFER
         and abs(destination_depth - bioswimmer.depth) <= DEPTH_BUFFER)
@@ -48,9 +48,9 @@ def is_current_gps_coordinate_complete(bioswimmer):
 def send_velocity_data_to_bioswimmer(bioswimmer, client):
     if is_current_gps_coordinate_complete(bioswimmer):
         print("************************************************************\n")
-        print("Completed current coordinate: ", bioswimmer.gps_tuples[0], '\n')
+        print("Completed current coordinate: ", bioswimmer.destination_coordinates[0], '\n')
         print("************************************************************\n")
-        del bioswimmer.gps_tuples[0]
+        del bioswimmer.destination_coordinates[0]
 
     move_byte_stream = get_bioswimmer_velocity_byte_stream(bioswimmer)
     print(move_byte_stream, "\n")

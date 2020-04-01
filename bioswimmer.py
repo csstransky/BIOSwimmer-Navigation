@@ -1,8 +1,18 @@
+import csv 
+
+def get_csv_destination_coordinates(file_path):
+    destination_coordinates = []
+    with open(file_path, "r") as csv_file: 
+        csv_reader = csv.reader(csv_file, delimiter=',')        
+        csv_reader.__next__() # ignore the fields of the csv file
+        for row in csv_reader: 
+            coordinate_tuple = float(row[0]), float(row[1]), float(row[2])
+            destination_coordinates.append(coordinate_tuple) 
+    return destination_coordinates
 
 class BIOSwimmer:
-    def __init__(self):
-        # TODO: Set file reading later
-        self.gps_tuples = [(0, 0, 125), (2, 2, 2), (4, 4, 4)]
+    def __init__(self, file_path):
+        self.destination_coordinates = get_csv_destination_coordinates(file_path)
         self.x_acceleration = 0.0
         self.y_acceleration = 0.0
         self.z_acceleration = 0.0
