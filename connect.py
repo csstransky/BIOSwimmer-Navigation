@@ -32,12 +32,12 @@ try:
 		print(vars(bioswimmer), "\n")
 
 		print( '>> sending data' )
-		move_byte_stream = send.get_bioswimmer_velocity_byte_stream(bioswimmer)
+		move_byte_stream = send.send_velocity_data_to_bioswimmer(bioswimmer, client)
 		print(move_byte_stream, "\n")
-		client.send(move_byte_stream)
 
-		print( '>> moving camera' )
-		servo.move_servo(bioswimmer)
+		print( '<< moving camera' )
+		servo_angle = servo.move_servo(bioswimmer)
+		print(servo_angle, "\n")
 
 except KeyboardInterrupt:
 	client.close()

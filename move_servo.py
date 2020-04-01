@@ -50,12 +50,10 @@ def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y
 
     pwm.stop()
     GPIO.cleanup()
+    return angle
 
 def move_servo(bioswimmer):
     cam_target_longitude, cam_target_latitude = bioswimmer.camera_target_tuple
-    move_raspberry_servo(bioswimmer.gps_longitude, 
-        bioswimmer.gps_latitude, 
-        bioswimmer.compass_direction, 
-        cam_target_longitude, 
-        cam_target_latitude)
+    return move_raspberry_servo(bioswimmer.gps_longitude, bioswimmer.gps_latitude, 
+        bioswimmer.compass_direction, cam_target_longitude, cam_target_latitude)
     

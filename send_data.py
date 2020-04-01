@@ -53,5 +53,5 @@ def send_velocity_data_to_bioswimmer(bioswimmer, client):
         del bioswimmer.path_coordinate_tuples[0]
 
     move_byte_stream = get_bioswimmer_velocity_byte_stream(bioswimmer)
-    print(move_byte_stream, "\n")
     client.send(move_byte_stream)
+    return move_byte_stream
