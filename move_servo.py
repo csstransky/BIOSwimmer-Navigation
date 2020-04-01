@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # importing csv module 
-import csv 
 import math
 import RPi.GPIO as GPIO
 from time import sleep
@@ -11,30 +10,7 @@ GPIO.setup(servoPIN, GPIO.OUT)
 pwm=GPIO.PWM(servoPIN, 50)
 pwm.start(0)
 
-def read_files():
-    # initializing the titles and rows list 
-    fields = []  
-    rows = []
-    # reading csv file 
-    with open('/home/pi/shared/bioswimmer_file.txt', "r") as csv_file: 
-    # creating a csv reader object 
-        csv_reader = csv.reader(csv_file) 
-        
-    # extracting field names through first row 
-        fields = csv_reader.next() 
-    
-    # extracting each data row one by one 
-        for row in csv_reader: 
-            rows.append(row) 
-
-
-        current_x = float (fields[0])
-        current_y = float (fields[1])
-        compass_angle = float (fields[2])
-        destination_x = float (fields[3])
-        destination_y = float (fields[4])
-
-def move_servo(current_x, current_y, compass_angle, destination_x, destination_y):
+def move_raspberry_servo(current_x, current_y, compass_angle, destination_x, destination_y):
 
     print("start") 
 
@@ -74,3 +50,12 @@ def move_servo(current_x, current_y, compass_angle, destination_x, destination_y
 
     pwm.stop()
     GPIO.cleanup()
+
+def move_servo(bioswimmer):
+    destination_latitude, destination_longitude, _ = bioswimmer.destination_coordinates[0]
+    move_raspberry_servo(bioswimmer.gps_longitude, 
+        bioswimmer.gps_latitude, 
+        bioswimmer.compass_direction, 
+        destination_longitude, 
+        destination_latitude)
+    
