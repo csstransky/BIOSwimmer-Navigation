@@ -8,7 +8,7 @@ import bioswimmer as bswim
 
 # Assumes Python3 environment
 
-bioswimmer = bswim.BIOSwimmer("gps_data.csv")
+bioswimmer = bswim.BIOSwimmer("gps_data.csv", "camera_target.csv")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Static IP to the BIOSwimmer's wifi buoy
 fbrain = "10.221.22.2"

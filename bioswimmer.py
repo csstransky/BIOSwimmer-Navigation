@@ -1,18 +1,29 @@
 import csv 
 
-def get_csv_destination_coordinates(file_path):
-    destination_coordinates = []
+def get_csv_coordinate_tuples(file_path):
+    # fixed_row_size of 3 is used for pathing, and a fixed_row_size of 2 is used for the cam target
+    def get_csv_coordinate_tuple(row, fixed_row_size):
+        if fixed_row_size == 3:
+            return float(row[0]), float(row[1]), float(row[2])
+        elif fixed_row_size == 2: 
+            return float(row[0]), float(row[1])
+        else:
+            print("ERROR: CSV FILE IS FORMATTED INCORRECTLY\n\n")
+
+    coordinate_tuples = []
     with open(file_path, "r") as csv_file: 
         csv_reader = csv.reader(csv_file, delimiter=',')        
-        csv_reader.__next__() # ignore the fields of the csv file
+        fixed_row_size = len(csv_reader.__next__()) # get size and ignore the fields of the csv file
         for row in csv_reader: 
-            coordinate_tuple = float(row[0]), float(row[1]), float(row[2])
-            destination_coordinates.append(coordinate_tuple) 
-    return destination_coordinates
+            coordinate_tuple = get_csv_coordinate_tuple(row, fixed_row_size)
+            coordinate_tuples.append(coordinate_tuple) 
+    return coordinate_tuples
 
 class BIOSwimmer:
-    def __init__(self, file_path):
-        self.destination_coordinates = get_csv_destination_coordinates(file_path)
+    def __init__(self, gps_file_path, target_file_path):
+        self.path_coordinate_tuples = get_csv_coordinate_tuples(gps_file_path)
+        # TODO: In the future, handle multiple camera target points instead of just 1
+        self.camera_target_tuple = get_csv_coordinate_tuples(target_file_path)[0]
         self.x_acceleration = 0.0
         self.y_acceleration = 0.0
         self.z_acceleration = 0.0
@@ -44,4 +55,4 @@ class BIOSwimmer:
         self.time_stamp = 0
 
     def is_mission_complete(self):
-        return self.destination_coordinates == []
+        return self.path_coordinate_tuples == []

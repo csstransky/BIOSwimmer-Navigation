@@ -10,12 +10,12 @@ GPIO.setup(servoPIN, GPIO.OUT)
 pwm=GPIO.PWM(servoPIN, 50)
 pwm.start(0)
 
-def move_raspberry_servo(current_x, current_y, compass_angle, destination_x, destination_y):
+def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y):
 
     print("start") 
 
-    dx = current_x-destination_x
-    dy = current_y-destination_y
+    dx = current_x-target_x
+    dy = current_y-target_y
 
     distance = math.sqrt((dx*dx)+(dy*dy))
     print (dx)
@@ -52,10 +52,10 @@ def move_raspberry_servo(current_x, current_y, compass_angle, destination_x, des
     GPIO.cleanup()
 
 def move_servo(bioswimmer):
-    destination_latitude, destination_longitude, _ = bioswimmer.destination_coordinates[0]
+    cam_target_longitude, cam_target_latitude = bioswimmer.camera_target_tuple
     move_raspberry_servo(bioswimmer.gps_longitude, 
         bioswimmer.gps_latitude, 
         bioswimmer.compass_direction, 
-        destination_longitude, 
-        destination_latitude)
+        cam_target_longitude, 
+        cam_target_latitude)
     
