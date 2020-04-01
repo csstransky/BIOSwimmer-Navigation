@@ -43,4 +43,5 @@ class BIOSwimmer:
         self.motion_state = 0.0
         self.time_stamp = 0
 
-    
+    def is_mission_complete(self):
+        return self.destination_coordinates == []

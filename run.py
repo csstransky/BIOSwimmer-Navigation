@@ -20,3 +20,4 @@ if send.is_current_gps_coordinate_complete(bioswimmer):
     del bioswimmer.destination_coordinates[0]
 move_byte_stream = send.get_bioswimmer_velocity_byte_stream(bioswimmer)
 print(move_byte_stream, "\n")
+print(bioswimmer.is_mission_complete())
