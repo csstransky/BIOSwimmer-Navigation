@@ -1,23 +1,45 @@
+import socket
+import sys
+import time
 import read_data as read
 import send_data as send
+import move_servo as servo
 import bioswimmer as bswim
 
-string1 = "{01+00000+00000+00000-00000+00000+00000}"
-string2 = "{04+00383+24888-00107}{06-00126}{03+00001+00000+00000+00000+00000+231}{05+00000+000000NaN+000000NaN-00000+00000+00NaN+0+00000}{07+08582}{10+43+00+00+1+09407}"
-bioswimmer = bswim.BIOSwimmer("gps_data.csv", "camera_target.csv")
-print("---------==========================---------------")
-print(bioswimmer.path_coordinate_tuples)
-print("---------==========================---------------")
-print(vars(bioswimmer))
-read.read_bioswimmer_data(bioswimmer, string1)
-read.read_bioswimmer_data(bioswimmer, string2)
-print("\n", vars(bioswimmer))
+# Assumes Python3 environment
 
-if send.is_current_gps_coordinate_complete(bioswimmer):
-    print("************************************************************")
-    print("Completed current coordinate: ", bioswimmer.path_coordinate_tuples[0])
-    print("************************************************************")
-    del bioswimmer.path_coordinate_tuples[0]
-move_byte_stream = send.get_bioswimmer_velocity_byte_stream(bioswimmer)
-print(move_byte_stream, "\n")
-print(bioswimmer.is_mission_complete())
+bioswimmer = bswim.BIOSwimmer("gps_data.csv", "camera_target.csv")
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# Static IP to the BIOSwimmer's wifi buoy
+fbrain = "10.221.22.2"
+# Special port to allow for data to be sent and received by the BIOSwimmer
+port = 55557
+
+client.connect((fbrain, port))
+
+# 1. Connect the Raspberry Pi to the fish across WM-003
+# 2. Connect the laptop to the fish across WM-003
+# 3. Open the OCU (C:/program_files(x86)/AUV/BIOSwimmerOCU.exe) on the laptop
+# 4. In the OCU, zero out the fins and tails
+# 5. Click on the "Manual Mode" tab, then press the "Manual Mode Enable" once
+# 6. In the top right, it should switch from "Setup" to "Operate (PDO)"
+# 7. Now run the Python script to move and read the fish
+
+try: 
+	while ( not bioswimmer.is_mission_complete ):
+		print( '<< receiving data' )
+		read.update_bioswimmer_data_from_client(bioswimmer, client)
+		print(vars(bioswimmer), "\n")
+
+		print( '>> sending data' )
+		move_byte_stream = send.send_velocity_data_to_bioswimmer(bioswimmer, client)
+		print(move_byte_stream, "\n")
+
+		print( '<< moving camera' )
+		servo_angle = servo.move_servo(bioswimmer)
+		print(servo_angle, "\n")
+
+except KeyboardInterrupt:
+	client.close()
+	print('interrupted!')
+	
