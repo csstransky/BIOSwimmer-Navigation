@@ -1,10 +1,12 @@
+#!/usr/bin/python3
+
 import socket
 import src.read_data as read
 import src.send_data as send
 import src.move_servo as servo
 import src.bioswimmer as bswim
 
-bioswimmer = bswim.BIOSwimmer("gps_data.csv", "camera_target.csv")
+bioswimmer = bswim.BIOSwimmer("data/gps_data.csv", "data/camera_target.csv")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Static IP to the BIOSwimmer's wifi buoy
 fbrain = "10.221.22.2"

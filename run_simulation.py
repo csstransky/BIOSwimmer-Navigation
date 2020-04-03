@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import socket
 import read_data as read
 import send_data as send

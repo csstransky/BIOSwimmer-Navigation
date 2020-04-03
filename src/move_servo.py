@@ -3,12 +3,12 @@
 import math
 #import RPi.GPIO as GPIO
 from time import sleep
-GPIO.setmode(GPIO.BOARD)
-GPIO.setwarnings(False)
-servoPIN = 11
-GPIO.setup(servoPIN, GPIO.OUT)
-pwm=GPIO.PWM(servoPIN, 50)
-pwm.start(0)
+# GPIO.setmode(GPIO.BOARD)
+# GPIO.setwarnings(False)
+# servoPIN = 11
+# GPIO.setup(servoPIN, GPIO.OUT)
+# pwm=GPIO.PWM(servoPIN, 50)
+# pwm.start(0)
 
 def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y):
 
@@ -45,10 +45,10 @@ def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y
     duty = float(angle/180)
     print (duty)
     #GPIO.output(servoPIN,True)
-    pwm.ChangeDutyCycle(12.5)
-    sleep(0.865*(duty))
+    # pwm.ChangeDutyCycle(12.5)
+    # sleep(0.865*(duty))
 
-    pwm.stop()
+    # pwm.stop()
     #GPIO.cleanup()
     return angle
 
