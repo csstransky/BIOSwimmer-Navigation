@@ -1,8 +1,8 @@
 import socket
-import src.read_data as read
-import src.send_data as send
-import src.move_servo as servo
-import src.bioswimmer as bswim
+import read_data as read
+import send_data as send
+import move_servo as servo
+import bioswimmer as bswim
 
 bioswimmer = bswim.BIOSwimmer("gps_data.csv", "camera_target.csv")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -1,5 +1,5 @@
 import json
-import calc_velocity as calc_velocity
+import src.calc_velocity as calc_velocity
 
 # This buffer allows for the BIOSwimmer to get within an acceptable distance of 
 # the GPS coordinates to consider that waypoint "completed"

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # importing csv module 
 import math
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 from time import sleep
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -44,12 +44,12 @@ def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y
     angle = float (moveAng)
     duty = float(angle/180)
     print (duty)
-    GPIO.output(servoPIN,True)
+    #GPIO.output(servoPIN,True)
     pwm.ChangeDutyCycle(12.5)
     sleep(0.865*(duty))
 
     pwm.stop()
-    GPIO.cleanup()
+    #GPIO.cleanup()
     return angle
 
 def move_servo(bioswimmer):
