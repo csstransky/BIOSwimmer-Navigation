@@ -26,9 +26,9 @@ def get_bioswimmer_velocity_byte_stream(bioswimmer):
         bioswimmer.depth, bioswimmer.v_surface, bioswimmer.z_acceleration)
     
     move_map = {
-        "vNorth" : north_velocity,
-        "vEast" : east_velocity,
-        "depth" : depth_velocity
+        "vNorth" : round(north_velocity, 5),
+        "vEast" : round(east_velocity, 5),
+        "depth" : round(depth_velocity, 5)
     }
     move_json = json.dumps(move_map)
     # NOTE: It seems that the BIOSwimmer does not want a typical JSON, and needs all the quotes

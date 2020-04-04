@@ -14,7 +14,7 @@ fbrain = "10.221.22.2"
 port = 55557
 client.connect((fbrain, port))
 try: 
-	while ( not bioswimmer.is_mission_complete ):
+	while ( not bioswimmer.is_mission_complete() ):
 		print( '<< receiving data' )
 		read.update_bioswimmer_data_from_client(bioswimmer, client)
 		print(vars(bioswimmer), "\n")

@@ -38,10 +38,9 @@ def update_bioswimmer(bioswimmer, command_columns):
         bioswimmer.gps_altitude = float(command_columns[6]) if "NaN" not in command_columns[6] else 0
         bioswimmer.gps_num_satellites = float(command_columns[7])
         bioswimmer.gps_hdop = float(command_columns[8])
-        # TODO: Find out what the hell is missing in this command
-        bioswimmer.gps_bearing = float(command_columns[9]) if len(command_columns) <= 8 else 0
+        # TODO: This measurement shows up in the ICD.pdf, BUT doesn't seem to display
+        bioswimmer.gps_bearing = float(command_columns[9]) if len(command_columns) < 8 else 0
         return
-
     def update_depth_data(bioswimmer, command_columns):
         bioswimmer.depth = float(command_columns[1])
         return
@@ -88,10 +87,14 @@ def read_bioswimmer_data(bioswimmer, serial_data):
         return re.findall(r'\{([^}]+)', serial_data)
 
     def tokenize_command_columns(command):
-        return re.split(r'\W+', command)
+        sign_and_values = re.split(r'(\+|\-)', command)
+        command_columns = []
+        command_columns.append(sign_and_values[0])
+        for ii in range(1, len(sign_and_values), 2):
+            command_columns.append(sign_and_values[ii] + sign_and_values[ii + 1])
+        return command_columns
 
     commands = tokenize_commands(serial_data)
-
     for command in commands:
         command_columns = tokenize_command_columns(command)
         update_bioswimmer(bioswimmer, command_columns)

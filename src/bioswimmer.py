@@ -3,10 +3,13 @@ import csv
 def get_csv_coordinate_tuples(file_path):
     # fixed_row_size of 3 is used for pathing, and a fixed_row_size of 2 is used for the cam target
     def get_csv_coordinate_tuple(row, fixed_row_size):
+        # TODO: Is there a nicer way to do this?
         if fixed_row_size == 3:
             return float(row[0]), float(row[1]), float(row[2])
         elif fixed_row_size == 2: 
             return float(row[0]), float(row[1])
+        elif fixed_row_size == 1:
+            return float(row[0])
         else:
             print("ERROR: CSV FILE IS FORMATTED INCORRECTLY\n\n")
 

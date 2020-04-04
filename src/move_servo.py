@@ -14,8 +14,8 @@ def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y
 
     print("start") 
 
-    dx = current_x-target_x
-    dy = current_y-target_y
+    dx = current_x-target_x+0.000001
+    dy = current_y-target_y+0.000001
 
     distance = math.sqrt((dx*dx)+(dy*dy))
     print (dx)
