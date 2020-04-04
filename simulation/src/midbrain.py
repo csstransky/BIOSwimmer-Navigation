@@ -19,9 +19,6 @@ class MidBrain:
         self.depth = 0.0
         self.tick_count = 0
 
-    def get_mid_brain_data(self):
-        data.get_data_string(self)
-
     def set_mid_brain_data(self, data):
         data.set_data_string(self, data)
         self.set_acceleration()
@@ -44,16 +41,3 @@ class MidBrain:
         self.tick_count += 1
         del self.path_coordinate_tuples[0]
         del self.compass_angle_list[0]
-
-    def print(self):
-        print("MIDDDDDDBRAIN:")
-        print("Longitude: ", self.gps_longitude, 
-            "\tLatitude: ", self.gps_latitude, 
-            "\tDepth: ", self.depth)
-        print("vEast: ", self.v_east,
-            "\tvNorth: ", self.v_north,
-            "\t\tvSurface: ", self.v_surface)
-        print("X Acc.: ", self.x_acceleration,
-            "\t\tY Acc.: ", self.y_acceleration,
-            "\t\tZ Acc.: ", self.z_acceleration)
-        print("Timestamp: ", self.time_stamp)
