@@ -1,8 +1,9 @@
 #!/usr/bin/python
-# importing csv module 
+
 import math
-#import RPi.GPIO as GPIO
-from time import sleep
+# TODO: Put this back later
+# import RPi.GPIO as GPIO
+# from time import sleep
 # GPIO.setmode(GPIO.BOARD)
 # GPIO.setwarnings(False)
 # servoPIN = 11
@@ -10,46 +11,41 @@ from time import sleep
 # pwm=GPIO.PWM(servoPIN, 50)
 # pwm.start(0)
 
-def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y):
+def get_servo_angle(current_x, current_y, compass_angle, target_x, target_y):
+    dx = current_x - target_x + 0.000001
+    dy = current_y - target_y + 0.000001
 
-    print("start") 
-
-    dx = current_x-target_x+0.000001
-    dy = current_y-target_y+0.000001
-
-    distance = math.sqrt((dx*dx)+(dy*dy))
-    print (dx)
-    print (dy)
-    print (distance)
-    ang = math.atan(dx/dy)/(math.pi)*180
-    print (ang)
+    distance = math.sqrt((dx * dx) + (dy * dy))
+    ang = math.atan(dx / dy) / math.pi * 180
 
     if dx == 0:
         ang = 0
-    elif dx < 0 and dy< 0:
-        ang =-180+ang
+    elif dx < 0 and dy < 0:
+        ang = -180 + ang
     elif dx < 0 and dy >  0: 
-        ang = 180-ang
+        ang = 180 - ang
     else: 
         ang = ang
-    print (ang)
 
     moveAng = ang - compass_angle
-    print (moveAng)
-    if moveAng <0:
+    if moveAng < 0:
         moveAng = 360 + moveAng
     else:
         moveAng = moveAng
-    print (moveAng)
-    angle = float (moveAng)
-    duty = float(angle/180)
-    print (duty)
-    #GPIO.output(servoPIN,True)
+
+    return moveAng
+
+def move_raspberry_servo(current_x, current_y, compass_angle, target_x, target_y):
+
+    angle = get_servo_angle(current_x, current_y, compass_angle, target_x, target_y)
+    # TODO: Put this back later
+    # duty = float(angle/180)
+    # GPIO.output(servoPIN,True)
     # pwm.ChangeDutyCycle(12.5)
     # sleep(0.865*(duty))
 
     # pwm.stop()
-    #GPIO.cleanup()
+    # GPIO.cleanup()
     return angle
 
 def move_servo(bioswimmer):

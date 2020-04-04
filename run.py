@@ -17,15 +17,30 @@ try:
 	while ( not bioswimmer.is_mission_complete() ):
 		print( '<< receiving data' )
 		read.update_bioswimmer_data_from_client(bioswimmer, client)
-		print(vars(bioswimmer), "\n")
+		bioswimmer.print()
+		print("")
 
 		print( '>> sending data' )
 		move_byte_stream = send.send_velocity_data_to_bioswimmer(bioswimmer, client)
-		print(move_byte_stream, "\n")
+		print("Send Bytestream: ", move_byte_stream, "\n")
 
 		print( '<< moving camera' )
 		servo_angle = servo.move_servo(bioswimmer)
-		print(servo_angle, "\n")
+		print("Servo Angle: ", servo_angle, "\n")
+
+		if send.is_current_gps_coordinate_complete(bioswimmer):
+			print("************************************************************")
+			print("Completed current coordinate: ", bioswimmer.path_coordinate_tuples[0])
+			print("************************************************************")
+			del bioswimmer.path_coordinate_tuples[0]
+		else:
+			print("\n\n")
+		print("\n")
+
+	print("************************************************************")
+	print("Mission Complete!")
+	print("************************************************************")
+	print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 except KeyboardInterrupt:
 	client.close()

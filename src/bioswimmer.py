@@ -59,3 +59,15 @@ class BIOSwimmer:
 
     def is_mission_complete(self):
         return self.path_coordinate_tuples == []
+
+    def print(self):
+        print("Longitude: \t", format(self.gps_longitude, '0.10f'),
+            "\tLatitude: \t", format(self.gps_latitude, '0.10f'),
+            "Depth: \t\t", format(self.depth, '0.6f'))
+        print("vEast: \t\t", format(self.v_east, '0.6f'),
+            "\tvNorth: \t", format(self.v_north, '0.6f'),
+            "\tvSurface: \t", format(self.v_surface, '0.6f'))
+        print("X Acc.: \t", format(self.x_acceleration, '0.6f'),
+            "\tY Acc.: \t", format(self.y_acceleration, '0.6f'),
+            "\tZ Acc.: \t", format(self.z_acceleration, '0.6f'))
+        print("Tick Count: \t", self.tick_count)

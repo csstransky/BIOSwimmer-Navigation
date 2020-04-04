@@ -90,8 +90,19 @@ def read_bioswimmer_data(bioswimmer, serial_data):
         sign_and_values = re.split(r'(\+|\-)', command)
         command_columns = []
         command_columns.append(sign_and_values[0])
-        for ii in range(1, len(sign_and_values), 2):
-            command_columns.append(sign_and_values[ii] + sign_and_values[ii + 1])
+        ii = 1
+        while ii < len(sign_and_values):
+            # TODO: Horrible fix, but need something that fixes: "['-', '1e', '-', '06']"
+            # My suggestion is to git gud at regular expressions
+            if 'e' in sign_and_values[ii + 1]:
+                command_columns.append(sign_and_values[ii] 
+                    + sign_and_values[ii + 1]
+                    + sign_and_values[ii + 2]
+                    + sign_and_values[ii + 3])
+                ii += 4
+            else:
+                command_columns.append(sign_and_values[ii] + sign_and_values[ii + 1])
+                ii += 2
         return command_columns
 
     commands = tokenize_commands(serial_data)
