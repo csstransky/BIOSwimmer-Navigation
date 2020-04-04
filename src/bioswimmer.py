@@ -3,10 +3,13 @@ import csv
 def get_csv_coordinate_tuples(file_path):
     # fixed_row_size of 3 is used for pathing, and a fixed_row_size of 2 is used for the cam target
     def get_csv_coordinate_tuple(row, fixed_row_size):
+        # TODO: Is there a nicer way to do this?
         if fixed_row_size == 3:
             return float(row[0]), float(row[1]), float(row[2])
         elif fixed_row_size == 2: 
             return float(row[0]), float(row[1])
+        elif fixed_row_size == 1:
+            return float(row[0])
         else:
             print("ERROR: CSV FILE IS FORMATTED INCORRECTLY\n\n")
 
@@ -56,3 +59,15 @@ class BIOSwimmer:
 
     def is_mission_complete(self):
         return self.path_coordinate_tuples == []
+
+    def print(self):
+        print("Longitude: \t", format(self.gps_longitude, '0.10f'),
+            "\tLatitude: \t", format(self.gps_latitude, '0.10f'),
+            "Depth: \t\t", format(self.depth, '0.6f'))
+        print("vEast: \t\t", format(self.v_east, '0.6f'),
+            "\tvNorth: \t", format(self.v_north, '0.6f'),
+            "\tvSurface: \t", format(self.v_surface, '0.6f'))
+        print("X Acc.: \t", format(self.x_acceleration, '0.6f'),
+            "\tY Acc.: \t", format(self.y_acceleration, '0.6f'),
+            "\tZ Acc.: \t", format(self.z_acceleration, '0.6f'))
+        print("Tick Count: \t", self.tick_count)

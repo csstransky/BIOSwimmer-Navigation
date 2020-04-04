@@ -1,31 +1,30 @@
 #!/usr/bin/python3
 
+import time
 import socket
-import src.read_data as read
 import src.send_data as send
-import src.move_servo as servo
 import src.bioswimmer as bswim
+import simulation.src.midbrain as mbrain
+import simulation.src.simulation as simu
 
-bioswimmer = bswim.BIOSwimmer("data/gps_data.csv", "data/camera_target.csv")
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# Static IP to the BIOSwimmer's wifi buoy
-fbrain = "10.221.22.2"
-# Special port to allow for BIOSwimmer data to be sent and received
-port = 55557
-client.connect((fbrain, port))
+bioswimmer = bswim.BIOSwimmer("simulation/data/gps_data.csv", "simulation/data/camera_target.csv")
+midbrain = mbrain.MidBrain("simulation/data/animation_points.csv", 
+	"simulation/data/animation_compass.csv")
 try: 
 	while ( not bioswimmer.is_mission_complete() ):
+		midbrain.set_next_point()
+
 		print( '<< receiving data' )
-		read.update_bioswimmer_data_from_client(bioswimmer, client)
+		simu.update_bioswimmer_data_from_client(bioswimmer, midbrain)
 		bioswimmer.print()
-		print("")
+		print('')
 
 		print( '>> sending data' )
-		move_byte_stream = send.send_velocity_data_to_bioswimmer(bioswimmer, client)
+		move_byte_stream = simu.send_velocity_data_to_bioswimmer(bioswimmer, midbrain)
 		print("Send Bytestream: ", move_byte_stream, "\n")
 
 		print( '<< moving camera' )
-		servo_angle = servo.move_servo(bioswimmer)
+		servo_angle = simu.move_servo(bioswimmer)
 		print("Servo Angle: ", servo_angle, "\n")
 
 		if send.is_current_gps_coordinate_complete(bioswimmer):
@@ -37,11 +36,12 @@ try:
 			print("\n\n")
 		print("\n")
 
+		time.sleep(1)
+
 	print("************************************************************")
 	print("Mission Complete!")
 	print("************************************************************")
 	print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 except KeyboardInterrupt:
-	client.close()
 	print('interrupted!')
