@@ -23,13 +23,18 @@ def get_bioswimmer_velocity_byte_stream(bioswimmer):
         bioswimmer.gps_latitude, bioswimmer.v_north, bioswimmer.y_acceleration)
     east_velocity = calc_velocity.get_new_velocity_double(destination_longitude, 
         bioswimmer.gps_longitude, bioswimmer.v_east, bioswimmer.x_acceleration)
-    depth_velocity = calc_velocity.get_new_velocity_double(destination_depth,
-        bioswimmer.depth, bioswimmer.v_surface, bioswimmer.z_acceleration)
-    
+
+    # TODO: As we know right now, the depth can be simply fed into the BIOSwimmer and it reacts
+    # accordingly, BUT in the future, we may need to feed in certain depths to manipulate how fast
+    # we want the BIOSwimmer to dive.
+    # Example: Even though we want a depth of 10, we input 100 for a faster dive.
+    # needed_depth = calc_velocity.get_new_depth_double(destination_depth,
+    #   bioswimmer.depth, bioswimmer.v_surface, bioswimmer.z_acceleration)    
+
     move_map = {
         "vNorth" : format(north_velocity * DECIMAL_DEGREES_TO_METERS, '0.6f'),
         "vEast" : format(east_velocity * DECIMAL_DEGREES_TO_METERS, '0.6f'),
-        "depth" : format(depth_velocity * FEET_TO_METERS, '0.6f')
+        "depth" : format(destination_depth, '0.6f')
     }
     move_json = json.dumps(move_map)
     # NOTE: It seems that the BIOSwimmer does not want a typical JSON, and needs all the quotes
